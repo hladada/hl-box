@@ -1,0 +1,15 @@
+class VariableTest1 {
+    public static void main (String[] args) {
+
+        byte b1 = 12;
+        byte b2 = -128;
+
+        System.out.println(b1);
+        System.out.println(b2);
+
+        short s1 = 128;
+        int i1 = 1234;
+        long l1 = 23882947347123L;
+        System.out.println(l1);
+    }
+}
