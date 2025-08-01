@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class NumberGuessingGame {
     public static void main(String[] args) {
         Random random = new Random();
-        int secretNumber = random.nextInt(11); // 生成0-10之间的随机数
+        int secretNumber = random.nextInt(11); 
         Scanner scanner = new Scanner(System.in);
         int guess;
 
