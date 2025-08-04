@@ -1,3 +1,4 @@
+package com.example.numbergaming;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -56,7 +57,6 @@ public class NumberGuessingGame {
                 System.out.println("输入无效，请输入一个整数！");
                 scanner.next();
             }
-
             int guess = scanner.nextInt();
             String result = game.makeGuess(guess);
             System.out.println(result);
