@@ -52,6 +52,7 @@ public class NumberGuessingGame {
         Scanner scanner = new Scanner(System.in);
         System.out.println("请输入一个0-10之间的整数");
         while (!game.isGameOver()) {
+
             while (!scanner.hasNextInt()) {
                 System.out.println("输入无效，请输入一个整数！");
                 scanner.next();
