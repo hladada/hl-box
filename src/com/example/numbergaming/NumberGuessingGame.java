@@ -57,7 +57,6 @@ public class NumberGuessingGame {
                 scanner.next();
             }
             int guess = scanner.nextInt();
-
             String result = game.makeGuess(guess);
             System.out.println(result);
         }
