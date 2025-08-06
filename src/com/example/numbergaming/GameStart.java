@@ -51,7 +51,7 @@ public class GameStart{
         Properties properties = new Properties();
         try {
             // 读取配置文件
-            File configFile = new File("game.config");
+            File configFile = new File("game.configD:\\Project\\hl-box\\src\\game.config");
             // 检查配置文件是否存在，如果不存在则创建并写入默认值
             if (!configFile.exists()) {
                 System.out.println("配置文件不存在，创建默认配置文件...");
