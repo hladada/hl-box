@@ -15,7 +15,7 @@ public class CommonTest {
 
     public static void main(String[] args) {
         System.out.println("=== 开始文件IO功能验证 ===");
-
+  
         // 测试配置文件读取功能
         testConfigFileReading();
 
