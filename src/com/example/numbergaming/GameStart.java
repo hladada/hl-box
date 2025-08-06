@@ -1,42 +1,89 @@
 package com.example.numbergaming;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**
- * 游戏启动器类，作为程序的入口点
- * 负责协调用户输入与游戏逻辑的交互
+ * 游戏启动器类
+ * 负责加载配置文件、初始化游戏并处理用户交互
  */
-public class GameStart {
-    /**
-     * 程序主方法，JVM从这里开始执行
-     */
-    public static void main(String[] args) {
-        //创建数字猜谜游戏实例，初始化游戏
-        NumberGuessingGame game = new NumberGuessingGame();
+public class GameStart{
+    // 默认最大猜测次数，如果配置文件加载失败则使用此值
+    private static final int DEFAULT_MAX_ATTEMPTS = 3;
 
-        //创建Scanner对象，用于读取用户的控制台输入
+    public static void main(String[] args) {
+        // 加载配置文件获取最大猜测次数
+        int maxAttempts = loadMaxAttemptsFromConfig();
+
+        // 初始化游戏，使用从配置文件加载的最大猜测次数
+        NumberGuessingGame game = new NumberGuessingGame(maxAttempts);
         Scanner scanner = new Scanner(System.in);
 
-        //向用户显示游戏开始提示信息，说明输入范围
-        System.out.println("请输入一个0-10之间的整数");
+        System.out.println("欢迎来到数字猜谜游戏！");
+        System.out.println("请猜一个0-10之间的整数，你有" + maxAttempts + "次机会");
 
-        //游戏主循环:只要游戏未结束，就持续接收用户猜测
+        // 游戏主循环，直到游戏结束
         while (!game.isGameOver()) {
-            //输入验证循环:确保用户输入的是整数
+            // 验证用户输入是否为整数
             while (!scanner.hasNextInt()) {
-                //提示用户输入无效，需要重新输入整数
                 System.out.println("输入无效，请输入一个整数！");
-                //读取并丢弃无效输入，避免循环卡住
-                scanner.next();
+                scanner.next(); // 清除无效输入
             }
-            //获取用户输入的整数猜测值
+
+            // 获取用户猜测的数字并处理
             int guess = scanner.nextInt();
-            //将猜测值传入游戏逻辑，获取判断结果
             String result = game.makeGuess(guess);
-            //向用户显示本次猜测的结果反馈
             System.out.println(result);
         }
-        //游戏结束后，关闭Scanner释放资源
+
+        // 关闭输入流
         scanner.close();
+    }
+
+    /**
+     * 从配置文件加载最大猜测次数
+     * @return 配置文件中的最大猜测次数，加载失败则返回默认值
+     */
+    private static int loadMaxAttemptsFromConfig() {
+        Properties properties = new Properties();
+        try {
+            // 读取配置文件
+            File configFile = new File("game.config");
+            // 检查配置文件是否存在，如果不存在则创建并写入默认值
+            if (!configFile.exists()) {
+                System.out.println("配置文件不存在，创建默认配置文件...");
+                // 实际应用中可以使用FileOutputStream写入默认配置
+                return DEFAULT_MAX_ATTEMPTS;
+            }
+
+            // 加载配置文件内容
+            properties.load(new FileInputStream(configFile));
+
+            // 从配置中获取maxAttempts属性
+            String maxAttemptsStr = properties.getProperty("maxAttempts");
+
+            // 验证配置值是否有效
+            if (maxAttemptsStr != null && !maxAttemptsStr.isEmpty()) {
+                int maxAttempts = Integer.parseInt(maxAttemptsStr);
+                // 确保配置值是正数
+                if (maxAttempts > 0) {
+                    return maxAttempts;
+                }
+            }
+
+            // 配置值无效时使用默认值
+            System.out.println("配置文件中的maxAttempts值无效，使用默认值: " + DEFAULT_MAX_ATTEMPTS);
+            return DEFAULT_MAX_ATTEMPTS;
+
+        } catch (IOException e) {
+            System.out.println("加载配置文件失败: " + e.getMessage() + "，使用默认值: " + DEFAULT_MAX_ATTEMPTS);
+            return DEFAULT_MAX_ATTEMPTS;
+        } catch (NumberFormatException e) {
+            System.out.println("配置文件中的maxAttempts不是有效的数字，使用默认值: " + DEFAULT_MAX_ATTEMPTS);
+            return DEFAULT_MAX_ATTEMPTS;
+        }
     }
 }
